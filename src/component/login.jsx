@@ -1,6 +1,6 @@
 import React from 'react';
 import {Signup} from './signup';
-import {Routers} from './router';
+import Routers from './router';
 
 export function IsSignin(props){
         if(props.value){
@@ -67,7 +67,7 @@ export class Login extends React.Component{
                 <div>
                     <div>sfdsfdsfdsf</div>
                     <button onClick={this.logout}>Logout</button>
-                    <Routers loggin={this.state.isLoggedIn}/>
+                    <Routers handleLoggin={this.state.isLoggedIn}/>
                 </div>
                 
             ));

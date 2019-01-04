@@ -22,24 +22,22 @@ import {Signup} from './signup';
 //     );
 // }
 
-export class Routers extends React.Component{
+class Routers extends React.Component{
     constructor(props){
         super(props);
-        this.state={isLoggedIn: false};
-        this.handleChange = this.handleChange.bind(this);
+        this.state={isLoggedIn: props.handleLoggin};
     }
-    handleChange(){
-        this.setState({isLoggedIn: this.props.loggin});
-    }
+
     render(){
+        const {isLoggedIn} = this.state;
         console.log("router login", this.state.isLoggedIn);
         return(
             <Router>
             <div className="container">
                 <ul>
                     <li><Link to="/">Home</Link></li>
-                    <li><Link to="/login" onClick={this.handleChange}>Login</Link></li>
-                    <li><Link to="/signup">Signup</Link></li>
+                    <li><Link to="/login">Login</Link></li>
+                    {!isLoggedIn && <li><Link to="/signup">Signup</Link></li>}
                 </ul>
                 <hr/>
                 <Route exact path="/" component={home}/>
@@ -51,6 +49,12 @@ export class Routers extends React.Component{
         );
     }
 }
+
+Routers.defaultProps={
+    handleLoggin: false
+}
+
+export default Routers;
 
 function home(){
     return(
