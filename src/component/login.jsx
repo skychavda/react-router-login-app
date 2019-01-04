@@ -1,5 +1,13 @@
 import React from 'react';
+import {Signup} from './signup';
+import {Routers} from './router';
 
+export function IsSignin(props){
+        if(props.value){
+            return <h1>hii</h1>;
+        }   
+    
+}
 export class Login extends React.Component{
 
     constructor(props){
@@ -7,7 +15,8 @@ export class Login extends React.Component{
         this.state= {
             email: '',
             password: '',
-            authValidate: false
+            authValidate: false,
+            isLoggedIn: false
         };
         this.handleChange = this.handleChange.bind(this);
         this.validate = this.validate.bind(this);
@@ -22,19 +31,24 @@ export class Login extends React.Component{
         const email = this.state.email;
         const password = this.state.password;
         if(email !== '' && password !== ''){
-            this.setState({authValidate: true});
-        }else{
-            this.setState({authValidate: false});
-            return <h1>Enter name and password</h1>;
+            this.setState({authValidate: true,
+            isLoggedIn: true
+            });
+            // Signup.handleLoggin();
         }
+        // else{
+        //     this.setState({authValidate: false,
+        //     isLoggedIn: false});
+        // }
     }
 
     logout(){
-        this.setState({authValidate: false});
+        this.setState({authValidate: false,isLoggedIn:false});
     }
 
     render(){
             console.log("authValidate", this.state.authValidate);
+            console.log("login",this.state.isLoggedIn);
         return(
         (!this.state.authValidate)?(
                 <div>
@@ -53,6 +67,7 @@ export class Login extends React.Component{
                 <div>
                     <div>sfdsfdsfdsf</div>
                     <button onClick={this.logout}>Logout</button>
+                    <Routers loggin={this.state.isLoggedIn}/>
                 </div>
                 
             ));
