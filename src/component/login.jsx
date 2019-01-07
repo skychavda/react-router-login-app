@@ -2,6 +2,8 @@ import React from 'react';
 import {Signup} from './signup';
 import Routers from './router';
 
+const emailRegex = RegExp(/^[a-zA-Z0-9]+@[a-zA-Z]+\.[A-Za-z]+$/);
+
 export function IsSignin(props){
         if(props.value){
             return <h1>hii</h1>;
@@ -16,7 +18,11 @@ export class Login extends React.Component{
             email: '',
             password: '',
             authValidate: false,
-            isLoggedIn: false
+            isLoggedIn: false,
+            formErrors: {
+                emailError: "",
+                pswdError: ""
+            }
         };
         this.handleChange = this.handleChange.bind(this);
         this.validate = this.validate.bind(this);
@@ -24,7 +30,26 @@ export class Login extends React.Component{
     }
 
     handleChange(e){
-        this.setState({[e.target.name]:e.target.value});
+        // this.setState({[e.target.name]:e.target.value});
+        e.preventDefault();
+
+        const { name, value } = e.target;
+        let formErrors = this.state.formErrors;
+ 
+        switch(name) {
+            case 'email': 
+                formErrors.emailError = emailRegex.test(value) ? "" : "Invalid Email Address";
+                break;
+
+            case 'password': 
+                formErrors.pswdError = value.length < 8 ? "Minimum 8 characters required" : "";
+                break;        
+        
+            default:
+                break;
+        }
+
+        this.setState({formErrors, [name]: value });
     }
 
     validate(){
@@ -49,16 +74,23 @@ export class Login extends React.Component{
     render(){
             console.log("authValidate", this.state.authValidate);
             console.log("login",this.state.isLoggedIn);
+            const {formErrors} = this.state;
         return(
         (!this.state.authValidate)?(
                 <div>
                     <div className="formGroup row">
                         <div className="input-label"><label htmlFor="email">Email:</label></div>
                         <div className="form-input-div"><input type="email" id="email" name="email" className="form-control" onChange={this.handleChange}/></div>
+                        {formErrors.emailError.length > 0 && (
+                            <div className="errorMessage">{formErrors.emailError}</div>
+                        )}
                     </div>
                     <div className="formGroup row">
                         <div className="input-label"><label htmlFor="password">Password: </label></div>
                         <div className="form-input-div"><input type="password" id="password" name="password" className="form-control" onChange={this.handleChange}/></div>
+                        {formErrors.pswdError.length > 0 && (
+                            <div className="errorMessage">{formErrors.pswdError}</div>
+                        )}
                     </div>
                     <input type="button" className="btn" value="Login" onClick={this.validate}/>
                     

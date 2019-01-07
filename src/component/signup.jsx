@@ -1,5 +1,9 @@
 import React from 'react';
 import {Login} from './login';
+import * as EmailValidator from 'email-validator';
+// /^[a-zA-Z0-9]+@[a-zA-Z]+\.[A-Za-z]+$/
+// const emailRegex = RegExp(/[A-Z0-9._%+-]+@[a-zA-Z.-]+.  [a-z]+.[a-zA-Z]{2,4}/igm);
+const nameRegex = RegExp(/^[a-zA-Z]$/);
 
 export class Signup extends React.Component{
     constructor(props){
@@ -11,7 +15,13 @@ export class Signup extends React.Component{
             email: '',
             formValidate: false,
             isLoggin: false,
-            isSignup: false
+            isSignup: false,
+            formErrors: {
+                fnameError: "",
+                lnameError: "",
+                emailError: "",
+                pswdError: ""
+            }
         };
         this.handleChange = this.handleChange.bind(this);
         this.validate = this.validate.bind(this);
@@ -23,9 +33,36 @@ export class Signup extends React.Component{
     }
 
     handleChange(e){
-        this.setState({
-            [e.target.name]:e.target.value
-        });
+        // this.setState({
+        //     [e.target.name]:e.target.value
+        // });
+        e.preventDefault();
+
+        const { name, value } = e.target;
+        let formErrors = this.state.formErrors;
+ 
+        switch(name) {
+            case 'fname': 
+                formErrors.fnameError = nameRegex.test(value) ? "" : "Number is not allowed";
+                break;
+            
+            case 'lname': 
+                formErrors.lnameError = nameRegex.test(value) ? "" : "Number is not allowed";
+                break;
+
+            case 'email': 
+                formErrors.emailError = EmailValidator.validate(value) ? "" : "Invalid Email Address";
+                break;
+
+            case 'password': 
+                formErrors.pswdError = value.length < 8 ? "Minimum 8 characters required" : "";
+                break;        
+        
+            default:
+                break;
+        }
+
+        this.setState({formErrors, [name]: value });
     }
 
     validate(){
@@ -44,24 +81,37 @@ export class Signup extends React.Component{
     render(){
         console.log(this.state.formValidate);
         console.log("login var from login.jsx", this.props.loggin);
+        const {formErrors} = this.state;
         return(
             (!this.state.formValidate && !this.props.loggin)?(
             <div>
                     <div className="formGroup row">
                        <div className="input-label"><label htmlFor="fname">First Name:</label></div>
                         <div className="form-input-div"><input type="text" id="fname" name="fname" className="form-control" onChange={this.handleChange}/></div>
+                        {formErrors.fnameError.length > 0 && (
+                            <div className="errorMessage">{formErrors.fnameError}</div>
+                        )}
                     </div>
                     <div className="formGroup row">
                         <div className="input-label"><label htmlFor="lname">Last Name:</label></div>
                         <div className="form-input-div"><input type="text" id="lname" name="lname" className="form-control" onChange={this.handleChange}/></div>
+                        {formErrors.lnameError.length > 0 && (
+                            <div className="errorMessage">{formErrors.lnameError}</div>
+                        )}
                     </div>
                     <div className="formGroup row">
                         <div className="input-label"><label htmlFor="email">Email:</label></div>
                         <div className="form-input-div"><input type="email" id="email" name="email" className="form-control" onChange={this.handleChange}/></div>
+                        {formErrors.emailError.length > 0 && (
+                            <div className="errorMessage">{formErrors.emailError}</div>
+                        )}
                     </div>
                     <div className="formGroup row">
                         <div className="input-label"><label htmlFor="password">Password: </label></div>
                         <div className="form-input-div"><input type="password" id="password" name="password" className="form-control" onChange={this.handleChange}/></div>
+                        {formErrors.emailError.length > 0 && (
+                            <div className="errorMessage">{formErrors.pswdError}</div>
+                        )}
                     </div>
                     <input type="button" className="btn" value="Signup" onClick={this.validate}/>
                     {/* <IsSignin value={false}/> */}

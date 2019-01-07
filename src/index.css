@@ -68,3 +68,8 @@ ul li{
     color: white;
     line-height: 12.5px;
 }
+
+.errorMessage{
+    font-size: 13px;
+    color: #ff0000;
+}
