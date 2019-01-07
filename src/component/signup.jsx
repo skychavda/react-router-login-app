@@ -3,7 +3,7 @@ import {Login} from './login';
 import * as EmailValidator from 'email-validator';
 // /^[a-zA-Z0-9]+@[a-zA-Z]+\.[A-Za-z]+$/
 // const emailRegex = RegExp(/[A-Z0-9._%+-]+@[a-zA-Z.-]+.  [a-z]+.[a-zA-Z]{2,4}/igm);
-const nameRegex = RegExp(/^[a-zA-Z]$/);
+const nameRegex = RegExp(/^([A-Za-z]+[,.]?[ ]?|[A-Za-z]+['-]?)+$/);
 
 export class Signup extends React.Component{
     constructor(props){
